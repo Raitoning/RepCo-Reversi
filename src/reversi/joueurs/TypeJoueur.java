@@ -1,4 +1,4 @@
-package joueurs;
+package reversi.joueurs;
 
 /** Enumération TypeJoueur
  * Permet de différentier un joueur humain d'une IA.

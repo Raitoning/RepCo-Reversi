@@ -1,4 +1,4 @@
-package joueurs;
+package reversi.joueurs;
 
 /** Classe JoueurBlanc.
  *

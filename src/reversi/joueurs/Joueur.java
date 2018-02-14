@@ -1,4 +1,7 @@
-package joueurs;
+package reversi.joueurs;
+
+
+import reversi.etats.Etat;
 
 /** Classe abstraite Joueur.
  *
@@ -22,6 +25,20 @@ public abstract class Joueur {
 
         score = 2;
         this.type = type;
+    }
+
+    // TODO: Ajouter le type de retour etats.Etat et un paramètre de type etats.Etat.
+    protected Etat jouer() {
+
+        if (type == TypeJoueur.Humain) {
+
+            System.out.println("Position du piont à ajouter: ");
+        } else {
+
+            //TODO: Réaliser le parcours des coups possibles
+        }
+
+        return null;
     }
 
     /** Getter de score

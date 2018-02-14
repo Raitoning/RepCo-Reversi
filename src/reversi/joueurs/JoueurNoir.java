@@ -1,4 +1,4 @@
-package joueurs;
+package reversi.joueurs;
 
 /** Classe JoueurNoir.
  * Représente le joueur qui joue avec les pions noirs.

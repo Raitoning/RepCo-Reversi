@@ -1,6 +1,10 @@
+package reversi.etats;
+
+import reversi.joueurs.*;
+
 public class Test {
     public static void testTableau(){
-        Joueur joueur = new Joueur();
+        Joueur joueur = new JoueurBlanc(TypeJoueur.Humain);
         Reversi r = new Reversi(joueur);
         r.setPlateau();
         int plateau[][] = new int[8][8];
