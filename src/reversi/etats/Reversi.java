@@ -1,8 +1,9 @@
 package reversi.etats;
 
-import reversi.joueurs.*;
+import reversi.joueurs.Joueur;
 
 public class Reversi extends Etat {
+
     protected int plateau[][];
 
     public Reversi(Joueur joueur){
@@ -10,9 +11,14 @@ public class Reversi extends Etat {
         super(joueur);
     }
 
-    public int[][] getPlateau(){
+    public int getElement(int x, int y){
 
-        return plateau;
+        return plateau[x][y];
+    }
+
+    public void setElement(int x, int y, int n){
+
+        this.plateau[x][y] = n;
     }
 
     public boolean compare(int[][] plateau){
@@ -39,12 +45,17 @@ public class Reversi extends Etat {
         2 -> Blanc
          */
         for (int i = 0; i < 8; i++) {
+
             for (int j = 0; j < 8; j++) {
-                if (i == 4 && j == 4 || i == 5 && j == 5) {
+
+                if (i == 3 && j == 3 || i == 4 && j == 4) {
+
                     plateau[i][j] = 2;
-                } else if (i == 4 && j == 5 || i == 5 && j == 4) {
+                } else if (i == 3 && j == 4 || i == 4 && j == 3) {
+
                     plateau[i][j] = 1;
                 } else {
+
                     plateau[i][j] = 0;
                 }
             }
@@ -53,5 +64,14 @@ public class Reversi extends Etat {
 
     public void aff_tableau(){
 
+        for (int i = 0; i < 8; i++){
+
+            System.out.print("| ");
+            for (int j = 0; j < 8; j++){
+
+                System.out.print(plateau[i][j] + " | ");
+            }
+            System.out.println("");
+        }
     }
 }
