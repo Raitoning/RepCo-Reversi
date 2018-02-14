@@ -3,6 +3,12 @@ public class Reversi extends Etat {
 
     public Reversi(Joueur joueur){
         super(joueur);
+        plateau = new int[8][8];
+        plateau[3][3] = 2;
+        plateau[4][4] = 2;
+        plateau[4][3] = 1;
+        plateau[3][4] = 1;
+
     }
 
     public int getElement(int x, int y){
@@ -22,27 +28,6 @@ public class Reversi extends Etat {
 
     public Joueur getJoueur(){
         return joueur;
-    }
-
-    public void setPlateau(){
-        plateau = new int[8][8];
-        /*
-        Création plateau :
-        0 -> Case vide
-        1 -> Noir
-        2 -> Blanc
-         */
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (i == 3 && j == 3 || i == 4 && j == 4) {
-                    plateau[i][j] = 2;
-                } else if (i == 3 && j == 4 || i == 4 && j == 3) {
-                    plateau[i][j] = 1;
-                } else {
-                    plateau[i][j] = 0;
-                }
-            }
-        }
     }
 
     public void aff_tableau(){
