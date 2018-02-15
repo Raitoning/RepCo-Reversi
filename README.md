@@ -1,1 +1,1 @@
-# RepCo-Reversi
+# RepCo-reversi.Reversi
