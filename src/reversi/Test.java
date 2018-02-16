@@ -7,7 +7,7 @@ public class Test {
         Joueur joueur = new Joueur(2);
         Reversi r = new Reversi(joueur);
 
-      r.aff_tableau();
+     // r.aff_tableau();
       System.out.println("-------------");
       r.algo();
       Iterator i = r.successeurBlanc();
