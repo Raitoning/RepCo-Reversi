@@ -21,6 +21,8 @@ public class Reversi extends Etat {
         plateau[4][4] = BLANC;
         plateau[4][3] = NOIR;
         plateau[3][4] = NOIR;
+        plateau[4][2] = NOIR;
+        plateau[5][1] = NOIR;
 
     }
 
@@ -69,6 +71,7 @@ public class Reversi extends Etat {
      * On stock dans l'arraylist d'état un nouvel état
      */
     public void mouvement_sud(int adverse, int posX, int posY){
+        plateauEtat = copy_tab();
        // int plateauAct[][] = Arrays.copyOf(plateau, 8);
         Reversi etatAct = new Reversi(joueur, plateauEtat);
         while (etatAct.getElement(posX, posY) == adverse){
@@ -78,10 +81,13 @@ public class Reversi extends Etat {
         etatAct.setElement(posX, posY, joueur.getColor());
         if (joueur.getColor() == BLANC){
            successeurBlanc.add(etatAct);
+        }else if (joueur.getColor() == NOIR){
+            successeurNoir.add(etatAct);
         }
     }
 
     public void mouvement_nord(int adverse, int posX, int posY){
+        plateauEtat = copy_tab();
         Reversi etatAct = new Reversi(joueur, plateauEtat);
         while (etatAct.getElement(posX, posY) == adverse){
             etatAct.setElement(posX, posY, joueur.getColor());
@@ -90,81 +96,102 @@ public class Reversi extends Etat {
         etatAct.setElement(posX, posY, joueur.getColor());
         if (joueur.getColor() == BLANC){
             successeurBlanc.add(etatAct);
+        }else if (joueur.getColor() == NOIR){
+            successeurNoir.add(etatAct);
         }
     }
 
     public void mouvement_ouest(int adverse, int posX, int posY){
-        int plateauAct[][] = plateau;
-        while (plateauAct[posX][posY] == adverse){
-            plateauAct[posX][posY] = joueur.getColor();
+        plateauEtat = copy_tab();
+        // int plateauAct[][] = Arrays.copyOf(plateau, 8);
+        Reversi etatAct = new Reversi(joueur, plateauEtat);
+        while (etatAct.getElement(posX, posY) == adverse){
+            etatAct.setElement(posX, posY, joueur.getColor());
             posY--;
         }
-        plateauAct[posX][posY] = joueur.getColor();
+        etatAct.setElement(posX, posY, joueur.getColor());
         if (joueur.getColor() == BLANC){
-            successeurBlanc.add(new Reversi(joueur, plateauAct));
+            successeurBlanc.add(etatAct);
+        }else if (joueur.getColor() == NOIR){
+            successeurNoir.add(etatAct);
         }
     }
 
     public void mouvement_est(int adverse, int posX, int posY){
-        int plateauAct[][] = plateau;
-        while (plateauAct[posX][posY] == adverse){
-            plateauAct[posX][posY] = joueur.getColor();
+        plateauEtat = copy_tab();
+        Reversi etatAct = new Reversi(joueur, plateauEtat);
+        while (etatAct.getElement(posX, posY) == adverse){
+            etatAct.setElement(posX, posY, joueur.getColor());
             posY++;
         }
-        plateauAct[posX][posY] = joueur.getColor();
+        etatAct.setElement(posX, posY, joueur.getColor());
         if (joueur.getColor() == BLANC){
-            successeurBlanc.add(new Reversi(joueur, plateauAct));
+            successeurBlanc.add(etatAct);
+        }else if (joueur.getColor() == NOIR){
+            successeurNoir.add(etatAct);
         }
     }
 
     public void mouvement_nest(int adverse, int posX, int posY){
-        int plateauAct[][] = plateau;
-        while (plateauAct[posX][posY] == adverse){
-            plateauAct[posX][posY] = joueur.getColor();
+        plateauEtat = copy_tab();
+        // int plateauAct[][] = Arrays.copyOf(plateau, 8);
+        Reversi etatAct = new Reversi(joueur, plateauEtat);
+        while (etatAct.getElement(posX, posY) == adverse){
+            etatAct.setElement(posX, posY, joueur.getColor());
             posX++;
             posY++;
         }
-        plateauAct[posX][posY] = joueur.getColor();
+        etatAct.setElement(posX, posY, joueur.getColor());
         if (joueur.getColor() == BLANC){
-            successeurBlanc.add(new Reversi(joueur, plateauAct));
+            successeurBlanc.add(etatAct);
+        }else if (joueur.getColor() == NOIR){
+            successeurNoir.add(etatAct);
         }
     }
 
     public void mouvement_nouest(int adverse, int posX, int posY){
-        int plateauAct[][] = plateau;
-        while (plateauAct[posX][posY] == adverse){
-            plateauAct[posX][posY] = joueur.getColor();
+        plateauEtat = copy_tab();
+        // int plateauAct[][] = Arrays.copyOf(plateau, 8);
+        Reversi etatAct = new Reversi(joueur, plateauEtat);
+        while (etatAct.getElement(posX, posY) == adverse){
+            etatAct.setElement(posX, posY, joueur.getColor());
             posX++;
             posY--;
         }
-        plateauAct[posX][posY] = joueur.getColor();
+        etatAct.setElement(posX, posY, joueur.getColor());
         if (joueur.getColor() == BLANC){
-            successeurBlanc.add(new Reversi(joueur, plateauAct));
+            successeurBlanc.add(etatAct);
+        }else if (joueur.getColor() == NOIR){
+            successeurNoir.add(etatAct);
         }
     }
     public void mouvement_souest(int adverse, int posX, int posY){
-        int plateauAct[][] = plateau;
-        while (plateauAct[posX][posY] == adverse){
-            plateauAct[posX][posY] = joueur.getColor();
+        Reversi etatAct = new Reversi(joueur, plateauEtat);
+        while (etatAct.getElement(posX, posY) == adverse){
+            etatAct.setElement(posX, posY, joueur.getColor());
             posX--;
             posY--;
         }
-        plateauAct[posX][posY] = joueur.getColor();
+        etatAct.setElement(posX, posY, joueur.getColor());
         if (joueur.getColor() == BLANC){
-            successeurBlanc.add(new Reversi(joueur, plateauAct));
+            successeurBlanc.add(etatAct);
+        }else if (joueur.getColor() == NOIR){
+            successeurNoir.add(etatAct);
         }
     }
 
     public void mouvement_sest(int adverse, int posX, int posY){
-        int plateauAct[][] = plateau;
-        while (plateauAct[posX][posY] == adverse){
-            plateauAct[posX][posY] = joueur.getColor();
+        Reversi etatAct = new Reversi(joueur, plateauEtat);
+        while (etatAct.getElement(posX, posY) == adverse){
+            etatAct.setElement(posX, posY, joueur.getColor());
             posX--;
             posY++;
         }
-        plateauAct[posX][posY] = joueur.getColor();
+        etatAct.setElement(posX, posY, joueur.getColor());
         if (joueur.getColor() == BLANC){
-            successeurBlanc.add(new Reversi(joueur, plateauAct));
+            successeurBlanc.add(etatAct);
+        }else if (joueur.getColor() == NOIR){
+            successeurNoir.add(etatAct);
         }
     }
 
@@ -175,20 +202,27 @@ public class Reversi extends Etat {
     public void check_around(int x, int y, int adverse) {
             if (plateau[x + 1][y] == adverse) {
                 mouvement_sud(adverse, x + 1, y);
-            } else if (plateau[x - 1][y] == adverse) {
+            }
+            if (plateau[x - 1][y] == adverse) {
                 mouvement_nord(adverse, x - 1, y);
-            } else if (plateau[x][y + 1] == adverse) {
-                //    mouvement_ouest(adverse, x, y-1);
-            } else if (plateau[x][y - 1] == adverse) {
-                //  mouvement_est(adverse, x, y+1);
-            } else if (plateau[x + 1][y + 1] == adverse) {
-                //  mouvement_nest(adverse, x + 1, y + 1);
-            } else if (plateau[x + 1][y - 1] == adverse) {
-                //    mouvement_nouest(adverse, x + 1, y - 1);
-            } else if (plateau[x - 1][y + 1] == adverse) {
-                //  mouvement_sest(adverse, x - 1, y + 1);
-            } else if (plateau[x - 1][y - 1] == adverse) {
-                //  mouvement_souest(adverse, x - 1, y - 1);
+            }
+            if (plateau[x][y - 1] == adverse) {
+                mouvement_ouest(adverse, x, y-1);
+            }
+            if (plateau[x][y + 1] == adverse) {
+                  mouvement_est(adverse, x, y+1);
+            }
+            if (plateau[x + 1][y + 1] == adverse) {
+                 mouvement_nest(adverse, x + 1, y + 1);
+            }
+            if (plateau[x + 1][y - 1] == adverse) {
+                mouvement_nouest(adverse, x + 1, y - 1);
+            }
+            if (plateau[x - 1][y + 1] == adverse) {
+                mouvement_sest(adverse, x - 1, y + 1);
+            }
+            if (plateau[x - 1][y - 1] == adverse) {
+                  mouvement_souest(adverse, x - 1, y - 1);
             }
     }
 
@@ -199,14 +233,12 @@ public class Reversi extends Etat {
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[0].length; j++) {
                 if (plateau[i][j] == BLANC && joueur.getColor() == BLANC) {
-                    plateauEtat = copy_tab();
                     check_around(i, j, NOIR);
                 } else if (plateau[i][j] == NOIR && joueur.getColor() == NOIR) {
                     check_around(i, j, BLANC);
                 }
             }
         }
-      //  successeurNoir.add(new Reversi(joueur, plateau));
     }
 
     public boolean equals(Reversi etat){
