@@ -1,4 +1,6 @@
-package reversi;
+package reversi.etats;
+
+import reversi.joueurs.Joueur;
 
 public abstract class Etat {
     protected Joueur joueur;

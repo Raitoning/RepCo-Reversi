@@ -1,7 +1,8 @@
-package reversi;
+package reversi.etats;
+
+import reversi.joueurs.Joueur;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 public class Reversi extends Etat {
@@ -72,7 +73,6 @@ public class Reversi extends Etat {
      */
     public void mouvement_sud(int adverse, int posX, int posY){
         plateauEtat = copy_tab();
-       // int plateauAct[][] = Arrays.copyOf(plateau, 8);
         Reversi etatAct = new Reversi(joueur, plateauEtat);
         while (etatAct.getElement(posX, posY) == adverse){
             etatAct.setElement(posX, posY, joueur.getColor());
