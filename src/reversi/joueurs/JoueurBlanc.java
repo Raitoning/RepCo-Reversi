@@ -18,4 +18,8 @@ public class JoueurBlanc extends Joueur {
     public int getColor(){
         return 2;
     }
+
+    public int getAdversaire(){
+        return 1;
+    }
 }
