@@ -1,1 +1,1 @@
-# RepCo-Reversi
+# RepCo-etats.Reversi
