@@ -36,10 +36,10 @@ public class Partie {
                 Reversi e = (Reversi) i.next();
                 if (e.getX() == x && e.getY() == y) {
                     if (r.getJoueur().getAdversaire() == BLANC) {
-                        if (r.successeursize() == 0){
-                            continuer = false;
-                            System.out.println("fin de partie");
-                        }
+//                        if (r.successeursize() == 0){
+//                            continuer = false;
+//                            System.out.println("fin de partie");
+//                        }
                         r = new Reversi(joueurBlanc, e.getPlateau(), true);
                         r.nettoyer();
                     } else if (r.getJoueur().getAdversaire() == NOIR) {
