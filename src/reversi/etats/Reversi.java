@@ -1,7 +1,6 @@
 package reversi.etats;
 
 import reversi.joueurs.Joueur;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -343,6 +342,4 @@ public class Reversi extends Etat {
         }
         System.out.println("-------");
     }
-
-
 }

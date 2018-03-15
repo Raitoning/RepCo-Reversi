@@ -3,6 +3,7 @@ package reversi.etats;
 import reversi.joueurs.Joueur;
 
 public abstract class Etat {
+
     protected Joueur joueur;
     protected int plateau[][];
     public Etat(Joueur joueur){
