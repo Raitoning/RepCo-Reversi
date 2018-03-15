@@ -14,4 +14,8 @@ public class JoueurBlanc extends Joueur {
 
         super(type);
     }
+
+    public int getColor(){
+        return 2;
+    }
 }

@@ -16,6 +16,8 @@ public abstract class Joueur {
      */
     private int score;
     private TypeJoueur type;
+    protected static int BLANC = 2;
+    protected static int NOIR = 1;
 
     /** Constructeur.
      *
@@ -68,4 +70,6 @@ public abstract class Joueur {
 
         return this.getClass().getSimpleName() + " (" + type + "): " + score;
     }
+
+    public abstract int getColor();
 }
