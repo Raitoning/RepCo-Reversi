@@ -17,4 +17,6 @@ public class JoueurNoir extends Joueur {
     public int getColor(){
         return 1;
     }
+
+    public int getAdversaire(){ return 2;}
 }

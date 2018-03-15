@@ -72,4 +72,6 @@ public abstract class Joueur {
     }
 
     public abstract int getColor();
+
+    public abstract int getAdversaire();
 }
