@@ -6,7 +6,6 @@ public class Test {
     public static void testTableau(){
         Joueur joueur = new JoueurBlanc(TypeJoueur.Humain);
         Reversi r = new Reversi(joueur);
-        r.setPlateau();
         int plateau[][] = new int[8][8];
       /*for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){

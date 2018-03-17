@@ -7,6 +7,8 @@ import java.util.Iterator;
 public class Reversi extends Etat {
     protected ArrayList<Reversi> successeurBlanc;
     protected ArrayList<Reversi> successeurNoir;
+    protected int compteurBlanc;
+    protected int compteurNoir;
     protected int plateauEtat[][];
     private int x;
     private int y;
@@ -24,6 +26,8 @@ public class Reversi extends Etat {
         plateau[4][4] = BLANC;
         plateau[4][3] = NOIR;
         plateau[3][4] = NOIR;
+        compteurBlanc = 2;
+        compteurNoir = 2;
     }
 
     public Reversi(Joueur joueur, int plateau[][], boolean nouvelEtat){
@@ -51,6 +55,12 @@ public class Reversi extends Etat {
         this.x = x;
         this.y = y;
         this.plateau[x][y] = n;
+        if (n == BLANC){
+            compteurBlanc++;
+        }
+        if (n == NOIR){
+            compteurNoir++;
+        }
     }
 
     public int getX(){
@@ -172,7 +182,6 @@ public class Reversi extends Etat {
             posY++;
         }
         etatAct.setElement(posX, posY, joueur.getColor());
-        System.out.println(erreur);
         if (joueur.getColor() == BLANC && erreur == false){
             successeurBlanc.add(etatAct);
         }else if (joueur.getColor() == NOIR && erreur == false){
@@ -182,7 +191,6 @@ public class Reversi extends Etat {
 
     public void mouvement_nest(int adverse, int posX, int posY){
         plateauEtat = copy_tab();
-        // int plateauAct[][] = Arrays.copyOf(plateau, 8);
         Reversi etatAct = new Reversi(joueur, plateauEtat, false);
         while (etatAct.getElement(posX+1, posY+1) == adverse){
             if (etatAct.getElement(posX, posY) == joueur.getColor()){
@@ -202,7 +210,6 @@ public class Reversi extends Etat {
 
     public void mouvement_nouest(int adverse, int posX, int posY){
         plateauEtat = copy_tab();
-        // int plateauAct[][] = Arrays.copyOf(plateau, 8);
         Reversi etatAct = new Reversi(joueur, plateauEtat, false);
         while (etatAct.getElement(posX, posY) == adverse){
             if (etatAct.getElement(posX+1, posY-1) == joueur.getColor()){
@@ -303,10 +310,8 @@ public class Reversi extends Etat {
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[0].length; j++) {
                 if (plateau[i][j] == BLANC && joueur.getColor() == BLANC) {
-                    System.out.println("check around = " + i + " " + j);
                     check_around(i, j, NOIR);
                 } else if (plateau[i][j] == NOIR && joueur.getColor() == NOIR) {
-                    System.out.println("check around = " + i + " " + j);
                     check_around(i, j, BLANC);
                 }
             }
