@@ -11,15 +11,20 @@ public class Reversi extends Etat {
     protected int compteurNoir;
     protected int plateauEtat[][];
     private int x;
+    private int noeud;
     private int y;
     private boolean erreur;
     protected static int BLANC = 2;
     protected static int NOIR = 1;
+    private int hauteur;
+    private int largeur;
 
 
     public Reversi(Joueur joueur){
         super(joueur);
         plateau = new int[8][8];
+        hauteur = 8;
+        largeur = 8;
         successeurNoir = new ArrayList<Reversi>();
         successeurBlanc = new ArrayList<Reversi>();
         plateau[3][3] = BLANC;
@@ -28,14 +33,36 @@ public class Reversi extends Etat {
         plateau[3][4] = NOIR;
         compteurBlanc = 2;
         compteurNoir = 2;
+        nettoyer();
     }
 
     public Reversi(Joueur joueur, int plateau[][], boolean nouvelEtat){
         super(joueur, plateau);
+        compteurNoir = compterNoir(plateau);
         if (nouvelEtat == true){
             successeurNoir = new ArrayList<Reversi>();
             successeurBlanc = new ArrayList<Reversi>();
         }
+    }
+
+    public int compterNoir(int plateau[][]){
+        int compteur = 0;
+        for (int i = 0; i < plateau.length; i++){
+            for (int j = 0; j < plateau[i].length; j++){
+                if (plateau[i][j] == NOIR){
+                    compteur++;
+                }
+            }
+        }
+        return compteur;
+    }
+
+    public void setNoeud(int val){
+        noeud = val;
+    }
+
+    public int getNoeud(){
+        return noeud;
     }
 
     public void nettoyer(){
@@ -43,6 +70,13 @@ public class Reversi extends Etat {
         successeurNoir.clear();
     }
 
+    public int getCompteurBlanc(){
+        return compteurBlanc;
+    }
+
+    public int getCompteurNoir(){
+        return compteurNoir;
+    }
     public int[][] getPlateau(){
         return plateau;
     }
@@ -88,6 +122,12 @@ public class Reversi extends Etat {
         return successeurNoir.size();
     }
 
+    public boolean isExist(int x, int y){
+        if (x < largeur && y < hauteur){
+            return true;
+        }
+        return false;
+    }
     /*
      * Methode de retours des différents successeurs pour le joueur noir
      */
@@ -156,12 +196,12 @@ public class Reversi extends Etat {
         plateauEtat = copy_tab();
         // int plateauAct[][] = Arrays.copyOf(plateau, 8);
         Reversi etatAct = new Reversi(joueur, plateauEtat, false);
-        while (etatAct.getElement(posX, posY) == adverse){
-            if (etatAct.getElement(posX, posY-1) == joueur.getColor()){
-                erreur = true;
-            }
-            etatAct.setElement(posX, posY, joueur.getColor());
-            posY--;
+        while (etatAct.getElement(posX, posY) == adverse && isExist(posX, posY-1)){
+               if (etatAct.getElement(posX, posY - 1) == joueur.getColor()) {
+                    erreur = true;
+                }
+                etatAct.setElement(posX, posY, joueur.getColor());
+                posY--;
         }
         etatAct.setElement(posX, posY, joueur.getColor());
         if (joueur.getColor() == BLANC && erreur == false){
