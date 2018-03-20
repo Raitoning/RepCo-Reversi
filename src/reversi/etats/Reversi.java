@@ -38,6 +38,8 @@ public class Reversi extends Etat {
 
     public Reversi(Joueur joueur, int plateau[][], boolean nouvelEtat){
         super(joueur, plateau);
+        largeur = 8;
+        hauteur = 8;
         compteurNoir = compterNoir(plateau);
         if (nouvelEtat == true){
             successeurNoir = new ArrayList<Reversi>();
@@ -82,19 +84,27 @@ public class Reversi extends Etat {
     }
 
     public int getElement(int x, int y){
+        if (x >= hauteur || y >= largeur || x < 0 || y < 0){
+            return 100;
+        }
         return plateau[x][y];
     }
 
     public void setElement(int x, int y, int n){
         this.x = x;
         this.y = y;
-        this.plateau[x][y] = n;
-        if (n == BLANC){
-            compteurBlanc++;
+        if (x >= hauteur || y >= largeur || x < 0 || y < 0){
+            erreur = true;
+        }else{
+            this.plateau[x][y] = n;
+            if (n == BLANC){
+                compteurBlanc++;
+            }
+            if (n == NOIR){
+                compteurNoir++;
+            }
         }
-        if (n == NOIR){
-            compteurNoir++;
-        }
+
     }
 
     public int getX(){
@@ -125,8 +135,9 @@ public class Reversi extends Etat {
     public boolean isExist(int x, int y){
         if (x < largeur && y < hauteur){
             return true;
+        }else {
+            return false;
         }
-        return false;
     }
     /*
      * Methode de retours des différents successeurs pour le joueur noir
@@ -309,38 +320,38 @@ public class Reversi extends Etat {
      * Si une piece environnante est trouvée, on envoit cette position à une fonction dédiée
      */
     public void check_around(int x, int y, int adverse) {
-            if (plateau[x + 1][y] == adverse) {
-                erreur = false;
-                mouvement_sud(adverse, x + 1, y);
-            }
-            if (plateau[x - 1][y] == adverse) {
-                erreur = false;
-                mouvement_nord(adverse, x - 1, y);
-            }
-            if (plateau[x][y - 1] == adverse) {
-                erreur = false;
-                mouvement_ouest(adverse, x, y-1);
-            }
-            if (plateau[x][y + 1] == adverse) {
-                erreur = false;
-                  mouvement_est(adverse, x, y+1);
-            }
-            if (plateau[x + 1][y + 1] == adverse) {
-                erreur = false;
-                 mouvement_nest(adverse, x + 1, y + 1);
-            }
-            if (plateau[x + 1][y - 1] == adverse) {
-                erreur = false;
-                mouvement_nouest(adverse, x + 1, y - 1);
-            }
-            if (plateau[x - 1][y + 1] == adverse) {
-                erreur = false;
-                mouvement_sest(adverse, x - 1, y + 1);
-            }
-            if (plateau[x - 1][y - 1] == adverse) {
-                erreur = false;
-                mouvement_souest(adverse, x - 1, y - 1);
-            }
+        if (getElement(x+1, y) == adverse && isExist(x + 1, y)) {
+            erreur = false;
+            mouvement_sud(adverse, x + 1, y);
+        }
+        if (getElement(x - 1, y) == adverse && isExist(x - 1, y)) {
+            erreur = false;
+            mouvement_nord(adverse, x - 1, y);
+        }
+        if (getElement(x, y-1) == adverse && isExist(x, y - 1)) {
+            erreur = false;
+            mouvement_ouest(adverse, x, y - 1);
+        }
+        if (getElement(x, y+1) == adverse && isExist(x, y + 1)) {
+            erreur = false;
+            mouvement_est(adverse, x, y + 1);
+        }
+        if (getElement(x+1, y+1) == adverse && isExist(x + 1, y + 1)) {
+            erreur = false;
+            mouvement_nest(adverse, x + 1, y + 1);
+        }
+        if (getElement(x+1, y-1) == adverse && isExist(x + 1, y - 1)) {
+            erreur = false;
+            mouvement_nouest(adverse, x + 1, y - 1);
+        }
+        if (getElement(x-1, y+1) == adverse && isExist(x - 1, y + 1)) {
+            erreur = false;
+            mouvement_sest(adverse, x - 1, y + 1);
+        }
+        if (getElement(x-1, y-1) == adverse && isExist(x - 1, y - 1)) {
+            erreur = false;
+            mouvement_souest(adverse, x - 1, y - 1);
+        }
     }
 
     /*

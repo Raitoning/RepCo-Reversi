@@ -29,7 +29,7 @@ public class Partie {
             r.aff_tableau();
             if (r.getJoueur().getAdversaire() == BLANC) {
                 System.out.println("Adversaire turn");
-                r = new Reversi(joueurBlanc, eval.eval0(r, 3, 0).getPlateau(), true);
+                r = new Reversi(joueurBlanc, eval.eval0(r, 8, 0).getPlateau(), true);
             } else {
                 System.out.println("Joueur : " + r.getJoueur().getColor());
                 System.out.println("x ? ");
