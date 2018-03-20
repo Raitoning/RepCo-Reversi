@@ -12,6 +12,7 @@ public class Evaluer {
     public Evaluer(){
     }
 
+    // NOTE: Elagage aggressif, trouver une méthode plus précise.
     public Reversi eval0(Reversi etat, int profondeur, int profAct) {
         if (profAct % 2 == 0) {
             etat.setNoeud(0);
@@ -34,12 +35,17 @@ public class Evaluer {
                     compare = eval0(etatAct, profondeur, profAct + 1).getNoeud();
                     if (compare > etat.getNoeud()) {
                         etat.setNoeud(compare);
+                    } else {
+                        return etat;
                     }
                 } else if (profAct % 2 == 1) {
                     etatAct = new Reversi(jb, e.getPlateau(), true);
                     compare = eval0(etatAct, profondeur, profAct + 1).getNoeud();
                     if (compare < etat.getNoeud()) {
                         etat.setNoeud(compare);
+                    } else {
+
+                        return etat;
                     }
                 }
             }
