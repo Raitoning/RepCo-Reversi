@@ -16,10 +16,23 @@ public class Reversi extends Etat {
     private boolean erreur;
     protected static int BLANC = 2;
     protected static int NOIR = 1;
+    protected static int HAUT = 3;
+    protected static int BAS = 4;
+    protected static int GAUCHE = 5;
+    protected static int DROITE = 6;
+    protected static int HAUTGAUCHE = 7;
+    protected static int BASGAUCHE = 8;
+    protected static int BASDROITE= 9;
+    protected static int HAUTDROITE = 10;
     private int hauteur;
     private int largeur;
 
 
+    public Reversi(Reversi r){
+        super(r.joueur, r.plateau);
+        x = r.getX();
+        y = r.getY();
+    }
     public Reversi(Joueur joueur){
         super(joueur);
         plateau = new int[8][8];
@@ -47,6 +60,13 @@ public class Reversi extends Etat {
         }
     }
 
+    public void setX(int x){
+        this.x = x;
+    }
+
+    public void setY(int y){
+        this.y = y;
+    }
     public int compterNoir(int plateau[][]){
         int compteur = 0;
         for (int i = 0; i < plateau.length; i++){
@@ -59,6 +79,10 @@ public class Reversi extends Etat {
         return compteur;
     }
 
+    public void setPlateau(int plateau[][]){
+       this.plateau = plateau;
+    }
+
     public void setNoeud(int val){
         noeud = val;
     }
@@ -68,8 +92,8 @@ public class Reversi extends Etat {
     }
 
     public void nettoyer(){
-        successeurBlanc.clear();
-        successeurNoir.clear();
+        successeurNoir = new ArrayList<Reversi>();
+        successeurBlanc = new ArrayList<Reversi>();
     }
 
     public int getCompteurBlanc(){
@@ -83,6 +107,9 @@ public class Reversi extends Etat {
         return plateau;
     }
 
+    public void setJoueur(Joueur j){
+        joueur = j;
+    }
     public int getElement(int x, int y){
         if (x >= hauteur || y >= largeur || x < 0 || y < 0){
             return 100;
@@ -163,149 +190,53 @@ public class Reversi extends Etat {
         return tab;
     }
 
-    /*
-     * Methode de mouvement vers le bas, tant qu'on trouve des pionts opposés on convertis
-     * On stock dans l'arraylist d'état un nouvel état
-     */
-    public void mouvement_sud(int adverse, int posX, int posY){
+    public void mouvement(int direction, int adverse, int posX, int posY){
         plateauEtat = copy_tab();
         Reversi etatAct = new Reversi(joueur, plateauEtat, false);
         while (etatAct.getElement(posX, posY) == adverse){
-            if (etatAct.getElement(posX+1, posY) == joueur.getColor()){
-                erreur = true;
-            }
-            etatAct.setElement(posX, posY, joueur.getColor());
-            posX++;
-        }
-        etatAct.setElement(posX, posY, joueur.getColor());
-        if (joueur.getColor() == BLANC && erreur == false){
-           successeurBlanc.add(etatAct);
-        }else if (joueur.getColor() == NOIR && erreur == false){
-            successeurNoir.add(etatAct);
-        }
-    }
 
-    public void mouvement_nord(int adverse, int posX, int posY){
-        plateauEtat = copy_tab();
-        Reversi etatAct = new Reversi(joueur, plateauEtat, false);
-        while (etatAct.getElement(posX, posY) == adverse){
-            if (etatAct.getElement(posX-1, posY) == joueur.getColor()){
-                erreur = true;
-            }
             etatAct.setElement(posX, posY, joueur.getColor());
-            posX--;
-        }
-        etatAct.setElement(posX, posY, joueur.getColor());
-        if (joueur.getColor() == BLANC && erreur == false){
-            successeurBlanc.add(etatAct);
-        }else if (joueur.getColor() == NOIR && erreur == false){
-            successeurNoir.add(etatAct);
-        }
-    }
-
-    public void mouvement_ouest(int adverse, int posX, int posY){
-        plateauEtat = copy_tab();
-        // int plateauAct[][] = Arrays.copyOf(plateau, 8);
-        Reversi etatAct = new Reversi(joueur, plateauEtat, false);
-        while (etatAct.getElement(posX, posY) == adverse && isExist(posX, posY-1)){
-               if (etatAct.getElement(posX, posY - 1) == joueur.getColor()) {
+            if (direction == BAS) {
+                if (etatAct.getElement(posX+1, posY) == joueur.getColor()){
                     erreur = true;
                 }
-                etatAct.setElement(posX, posY, joueur.getColor());
+                posX++;
+            }else if (direction == HAUT){
+                if (etatAct.getElement(posX-1, posY) == joueur.getColor()){
+                    erreur = true;
+                }
+                posX--;
+            }else if (direction == DROITE){
+                if (etatAct.getElement(posX, posY+1) == joueur.getColor()){
+                    erreur = true;
+                }
+                posY++;
+            }else if (direction == GAUCHE){
+                if (etatAct.getElement(posX, posY-1) == joueur.getColor()){
+                    erreur = true;
+                }
                 posY--;
-        }
-        etatAct.setElement(posX, posY, joueur.getColor());
-        if (joueur.getColor() == BLANC && erreur == false){
-            successeurBlanc.add(etatAct);
-        }else if (joueur.getColor() == NOIR && erreur == false){
-            successeurNoir.add(etatAct);
-        }
-    }
-
-    public void mouvement_est(int adverse, int posX, int posY){
-        plateauEtat = copy_tab();
-        Reversi etatAct = new Reversi(joueur, plateauEtat, false);
-        while (etatAct.getElement(posX, posY) == adverse){
-            if (etatAct.getElement(posX, posY+1) == joueur.getColor()){
-                erreur = true;
+            }else if (direction == HAUTDROITE){
+                if (etatAct.getElement(posX-1, posY+1) == joueur.getColor()){
+                    erreur = true;
+                }
+                posX--; posY++;
+            }else if (direction == BASDROITE){
+                if (etatAct.getElement(posX+1, posY+1) == joueur.getColor()){
+                    erreur = true;
+                }
+                posX++; posY++;
+            }else if (direction == BASGAUCHE){
+                if (etatAct.getElement(posX+1, posY-1) == joueur.getColor()){
+                    erreur = true;
+                }
+                posX++; posY--;
+            }else if (direction == HAUTGAUCHE){
+                if (etatAct.getElement(posX-1, posY-1) == joueur.getColor()){
+                    erreur = true;
+                }
+                posX--; posY--;
             }
-            etatAct.setElement(posX, posY, joueur.getColor());
-            posY++;
-        }
-        etatAct.setElement(posX, posY, joueur.getColor());
-        if (joueur.getColor() == BLANC && erreur == false){
-            successeurBlanc.add(etatAct);
-        }else if (joueur.getColor() == NOIR && erreur == false){
-            successeurNoir.add(etatAct);
-        }
-    }
-
-    public void mouvement_nest(int adverse, int posX, int posY){
-        plateauEtat = copy_tab();
-        Reversi etatAct = new Reversi(joueur, plateauEtat, false);
-        while (etatAct.getElement(posX+1, posY+1) == adverse){
-            if (etatAct.getElement(posX, posY) == joueur.getColor()){
-                erreur = true;
-            }
-            etatAct.setElement(posX, posY, joueur.getColor());
-            posX++;
-            posY++;
-        }
-        etatAct.setElement(posX, posY, joueur.getColor());
-        if (joueur.getColor() == BLANC && erreur == false){
-            successeurBlanc.add(etatAct);
-        }else if (joueur.getColor() == NOIR && erreur == false){
-            successeurNoir.add(etatAct);
-        }
-    }
-
-    public void mouvement_nouest(int adverse, int posX, int posY){
-        plateauEtat = copy_tab();
-        Reversi etatAct = new Reversi(joueur, plateauEtat, false);
-        while (etatAct.getElement(posX, posY) == adverse){
-            if (etatAct.getElement(posX+1, posY-1) == joueur.getColor()){
-                erreur = true;
-            }
-            etatAct.setElement(posX, posY, joueur.getColor());
-            posX++;
-            posY--;
-        }
-        etatAct.setElement(posX, posY, joueur.getColor());
-        if (joueur.getColor() == BLANC && erreur == false){
-            successeurBlanc.add(etatAct);
-        }else if (joueur.getColor() == NOIR && erreur == false){
-            successeurNoir.add(etatAct);
-        }
-    }
-    public void mouvement_souest(int adverse, int posX, int posY){
-        plateauEtat = copy_tab();
-        Reversi etatAct = new Reversi(joueur, plateauEtat, false);
-        while (etatAct.getElement(posX, posY) == adverse){
-            if (etatAct.getElement(posX-1, posY-1) == joueur.getColor()){
-                erreur = true;
-            }
-            etatAct.setElement(posX, posY, joueur.getColor());
-            posX--;
-            posY--;
-        }
-        etatAct.setElement(posX, posY, joueur.getColor());
-        if (joueur.getColor() == BLANC && erreur == false){
-            successeurBlanc.add(etatAct);
-        }else if (joueur.getColor() == NOIR && erreur == false){
-            successeurNoir.add(etatAct);
-        }
-    }
-
-    public void mouvement_sest(int adverse, int posX, int posY){
-        plateauEtat = copy_tab();
-        Reversi etatAct = new Reversi(joueur, plateauEtat, false);
-        while (etatAct.getElement(posX, posY) == adverse){
-            if (etatAct.getElement(posX-1, posY+1) == joueur.getColor()){
-                erreur = true;
-            }
-            etatAct.setElement(posX, posY, joueur.getColor());
-            posX--;
-            posY++;
         }
         etatAct.setElement(posX, posY, joueur.getColor());
         if (joueur.getColor() == BLANC && erreur == false){
@@ -322,35 +253,35 @@ public class Reversi extends Etat {
     public void check_around(int x, int y, int adverse) {
         if (getElement(x+1, y) == adverse && isExist(x + 1, y)) {
             erreur = false;
-            mouvement_sud(adverse, x + 1, y);
+            mouvement(BAS, adverse, x + 1, y);
         }
         if (getElement(x - 1, y) == adverse && isExist(x - 1, y)) {
             erreur = false;
-            mouvement_nord(adverse, x - 1, y);
+            mouvement(HAUT, adverse, x - 1, y);
         }
         if (getElement(x, y-1) == adverse && isExist(x, y - 1)) {
             erreur = false;
-            mouvement_ouest(adverse, x, y - 1);
+            mouvement(GAUCHE, adverse, x, y - 1);
         }
         if (getElement(x, y+1) == adverse && isExist(x, y + 1)) {
             erreur = false;
-            mouvement_est(adverse, x, y + 1);
+            mouvement(DROITE, adverse, x, y + 1);
         }
         if (getElement(x+1, y+1) == adverse && isExist(x + 1, y + 1)) {
             erreur = false;
-            mouvement_nest(adverse, x + 1, y + 1);
+            mouvement(BASDROITE, adverse, x + 1, y + 1);
         }
         if (getElement(x+1, y-1) == adverse && isExist(x + 1, y - 1)) {
             erreur = false;
-            mouvement_nouest(adverse, x + 1, y - 1);
+            mouvement(BASGAUCHE, adverse, x + 1, y - 1);
         }
         if (getElement(x-1, y+1) == adverse && isExist(x - 1, y + 1)) {
             erreur = false;
-            mouvement_sest(adverse, x - 1, y + 1);
+            mouvement(HAUTDROITE, adverse, x - 1, y + 1);
         }
         if (getElement(x-1, y-1) == adverse && isExist(x - 1, y - 1)) {
             erreur = false;
-            mouvement_souest(adverse, x - 1, y - 1);
+            mouvement(HAUTGAUCHE, adverse, x - 1, y - 1);
         }
     }
 
@@ -358,6 +289,8 @@ public class Reversi extends Etat {
      * Algo consitant à parcourir le tableau et a envoyer une détection environnante si on trouve le bon pion
      */
     public void algo() {
+        successeurBlanc = new ArrayList<Reversi>();
+        successeurNoir = new ArrayList<Reversi>();
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[0].length; j++) {
                 if (plateau[i][j] == BLANC && joueur.getColor() == BLANC) {
@@ -390,12 +323,21 @@ public class Reversi extends Etat {
 
     public void aff_tableau(){
         for (int i = 0; i < 8; i++){
-            System.out.print("| ");
+            System.out.print(i + " | ");
             for (int j = 0; j < 8; j++){
                 System.out.print(plateau[i][j] + " | ");
             }
             System.out.println("");
         }
-        System.out.println("-------");
+        for (int j = 0; j < 8; j++) {
+            if (j == 0) {
+                System.out.print("    " + j);
+            } else {
+                System.out.print("   " + j);
+            }
+            if (j == 7) {
+                System.out.println("");
+            }
+        }
     }
 }
