@@ -89,4 +89,63 @@ public class Algo {
         }
         return max;
     }
+
+    public int alphabeta(Reversi etat, int profondeur, int alpha, int beta,
+                     boolean maximiserJoueur) {
+
+        etat.algo();
+
+        if(profondeur == 0 || !etat.successeur().hasNext()) {
+
+            return eval0(etat);
+        }
+
+        int v;
+
+        Iterator<Reversi> iterator = etat.successeur();
+        Reversi state;
+
+        if(maximiserJoueur) {
+
+            v = Integer.MIN_VALUE;
+
+            while (iterator.hasNext()) {
+
+                state = iterator.next();
+
+                v = Math.max(v, alphabeta(state, profondeur - 1, alpha,
+                        beta, false));
+
+                alpha = Math.max(alpha, v);
+
+                /* Beta coupe */
+                if(beta <= alpha) {
+
+                    break;
+                }
+            }
+        } else {
+
+            v = Integer.MIN_VALUE;
+
+            while (iterator.hasNext()) {
+
+                state = iterator.next();
+
+                v = Math.min(v, alphabeta(state, profondeur - 1, alpha,
+                        beta, true));
+
+                beta = Math.min(beta, v);
+
+                /* Alpha coupe */
+                if(beta <= alpha) {
+
+                    break;
+                }
+            }
+
+        }
+
+        return v;
+    }
 }

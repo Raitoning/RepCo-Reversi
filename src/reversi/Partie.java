@@ -62,7 +62,11 @@ public class Partie {
         Reversi etat;
         while (i.hasNext()) {
             etat = i.next();
-            val = algo.min(etat, profondeur, 0, 0, eval);
+//            val = algo.min(etat, profondeur, 0, 0, eval);
+
+            val = algo.alphabeta(etat, profondeur, Integer.MIN_VALUE, Integer
+                    .MAX_VALUE, true);
+
             if (val > max) {
                 max = val;
                 meilleurcoup = etat;
@@ -113,13 +117,13 @@ public class Partie {
         while(gagnant == 0) {
             if (r.getJoueur().getColor() == NOIR) {
                 System.out.println("Tour du joueur noir:");
-                r = jeuIA(r, 3, 0);
+                r = jeuIA(r, 1, 0);
                 r.aff_tableau();
                 r.setJoueur(joueurBlanc);
                 System.out.println("Le joueur noir a joué en (" +  r.getX() + " ; " +  r.getY() + ")");
             } else if (r.getJoueur().getColor() == BLANC){
                 System.out.println("Tour du joueur blanc:");
-                r = jeuIA(r, 3, 0);
+                r = jeuIA(r, 1, 0);
                 r.aff_tableau();
                 r.setJoueur(joueurNoir);
                 System.out.println("Le joueur blanc a joué en (" +  r.getX() + " ; " +  r.getY() + ")");
