@@ -2,7 +2,6 @@ package reversi;
 
 import reversi.algo.Algo;
 import reversi.etats.Reversi;
-import reversi.joueurs.Joueur;
 import reversi.joueurs.JoueurBlanc;
 import reversi.joueurs.JoueurNoir;
 import java.util.Iterator;
@@ -12,13 +11,19 @@ public class Partie {
     private Reversi r;
     private JoueurBlanc joueurBlanc;
     private JoueurNoir joueurNoir;
+    private int gagnant;
+    private boolean arretBlanc;
+    private boolean arretNoir;
     protected static int BLANC = 2;
     protected static int NOIR = 1;
 
     public Partie(JoueurBlanc j1, JoueurNoir j2){
-        r = new Reversi(j1);
+        r = new Reversi(j2);
         joueurBlanc = j1;
         joueurNoir = j2;
+        gagnant = 0;
+        arretBlanc = false;
+        arretNoir = false;
     }
 
     public Reversi jeuIA(Reversi r, int profondeur) {
@@ -28,6 +33,24 @@ public class Partie {
         int val;
         r.nettoyer();
         r.algo();
+       /* if (r.successeursize() == 0 && r.getJoueur().getColor() == NOIR) {
+            arretNoir = true;
+        }
+        if (r.successeursize() == 0 && r.getJoueur().getColor() == BLANC) {
+            arretBlanc = true;
+        }*/
+        System.out.println(r.compterVide());
+        if (r.compterVide() == 0){
+            arretBlanc = true;
+            arretNoir = true;
+        }
+        if (arretBlanc && arretNoir) {
+            if (r.compterBlanc(r.getPlateau()) > r.compterNoir(r.getPlateau())) {
+                gagnant = 2;
+            } else if (r.compterNoir(r.getPlateau()) >= r.compterBlanc(r.getPlateau())) {
+                gagnant = 1;
+            }
+        }
         Iterator<Reversi> i = r.successeur();
         Reversi etat;
         while (i.hasNext()) {
@@ -38,7 +61,6 @@ public class Partie {
                 meilleurcoup = etat;
             }
         }
-        meilleurcoup.setJoueur(joueurBlanc);
         return meilleurcoup;
     }
 
@@ -47,7 +69,7 @@ public class Partie {
         boolean continuer = true;
         System.out.println("Début de la partie, veuillez rentrer les coordonnés selon l'axe commençant en haut à gauche");
         r.aff_tableau();
-        while(continuer == true) {
+        while(continuer) {
             if (r.getJoueur().getAdversaire() == BLANC) {
                 System.out.println("Tour de l'adversaire:");
                 long millis = System.currentTimeMillis();
@@ -65,6 +87,7 @@ public class Partie {
                 int y = saisie.nextInt();
                 r.algo();
                 Iterator i = r.successeur();
+              System.out.println(r.successeursize());
                 while (i.hasNext()) {
                     Reversi e = (Reversi) i.next();
                     if (e.getX() == x && e.getY() == y) {
@@ -75,6 +98,30 @@ public class Partie {
                 System.out.println("votre coup");
                 r.aff_tableau();
             }
+        }
+    }
+
+    public void iaVSia(){
+        r.aff_tableau();
+        while(gagnant == 0) {
+            if (r.getJoueur().getColor() == NOIR) {
+                System.out.println("Tour du joueur noir:");
+                r = jeuIA(r, 3);
+                r.aff_tableau();
+                r.setJoueur(joueurBlanc);
+                System.out.println("Le joueur noir a joué en (" +  r.getX() + " ; " +  r.getY() + ")");
+            } else if (r.getJoueur().getColor() == BLANC){
+                System.out.println("Tour du joueur blanc:");
+                r = jeuIA(r, 3);
+                r.aff_tableau();
+                r.setJoueur(joueurNoir);
+                System.out.println("Le joueur blanc a joué en (" +  r.getX() + " ; " +  r.getY() + ")");
+            }
+        }
+        if (gagnant == 2){
+            System.out.println(" BLANC gagnant");
+        }else if (gagnant == 1){
+            System.out.println(" NOIR gagnant");
         }
     }
 }

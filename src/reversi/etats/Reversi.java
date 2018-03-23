@@ -11,7 +11,6 @@ public class Reversi extends Etat {
     protected int compteurNoir;
     protected int plateauEtat[][];
     private int x;
-    private int noeud;
     private int y;
     private boolean erreur;
     protected static int BLANC = 2;
@@ -28,11 +27,6 @@ public class Reversi extends Etat {
     private int largeur;
 
 
-    public Reversi(Reversi r){
-        super(r.joueur, r.plateau);
-        x = r.getX();
-        y = r.getY();
-    }
     public Reversi(Joueur joueur){
         super(joueur);
         plateau = new int[8][8];
@@ -44,9 +38,19 @@ public class Reversi extends Etat {
         plateau[4][4] = BLANC;
         plateau[4][3] = NOIR;
         plateau[3][4] = NOIR;
-        compteurBlanc = 2;
-        compteurNoir = 2;
         nettoyer();
+    }
+
+    public int compterVide() {
+        int compteur = 0;
+        for (int i = 0; i < plateau.length; i++) {
+            for (int j = 0; j < plateau[i].length; j++) {
+                if (plateau[i][j] == 0) {
+                    compteur++;
+                }
+            }
+        }
+        return compteur;
     }
 
     public Reversi(Joueur joueur, int plateau[][], boolean nouvelEtat){
@@ -54,19 +58,13 @@ public class Reversi extends Etat {
         largeur = 8;
         hauteur = 8;
         compteurNoir = compterNoir(plateau);
-        if (nouvelEtat == true){
+        compteurBlanc = compterBlanc(plateau);
+        if (nouvelEtat){
             successeurNoir = new ArrayList<Reversi>();
             successeurBlanc = new ArrayList<Reversi>();
         }
     }
 
-    public void setX(int x){
-        this.x = x;
-    }
-
-    public void setY(int y){
-        this.y = y;
-    }
     public int compterNoir(int plateau[][]){
         int compteur = 0;
         for (int i = 0; i < plateau.length; i++){
@@ -79,16 +77,16 @@ public class Reversi extends Etat {
         return compteur;
     }
 
-    public void setPlateau(int plateau[][]){
-       this.plateau = plateau;
-    }
-
-    public void setNoeud(int val){
-        noeud = val;
-    }
-
-    public int getNoeud(){
-        return noeud;
+    public int compterBlanc(int plateau[][]){
+        int compteur = 0;
+        for (int i = 0; i < plateau.length; i++){
+            for (int j = 0; j < plateau[i].length; j++){
+                if (plateau[i][j] == BLANC){
+                    compteur++;
+                }
+            }
+        }
+        return compteur;
     }
 
     public void nettoyer(){
@@ -96,13 +94,6 @@ public class Reversi extends Etat {
         successeurBlanc = new ArrayList<Reversi>();
     }
 
-    public int getCompteurBlanc(){
-        return compteurBlanc;
-    }
-
-    public int getCompteurNoir(){
-        return compteurNoir;
-    }
     public int[][] getPlateau(){
         return plateau;
     }
@@ -142,6 +133,12 @@ public class Reversi extends Etat {
         return y;
     }
 
+    public int sizeSuccesseur(){
+        if (joueur.getColor() == BLANC) {
+            return successeurBlanc.size();
+        }
+        return successeurNoir.size();
+    }
     /*
      * Methode de retours des différents successeurs pour le joueur noir
      */
@@ -160,11 +157,7 @@ public class Reversi extends Etat {
     }
 
     public boolean isExist(int x, int y){
-        if (x < largeur && y < hauteur){
-            return true;
-        }else {
-            return false;
-        }
+        return x < largeur && y < hauteur;
     }
     /*
      * Methode de retours des différents successeurs pour le joueur noir
@@ -197,51 +190,51 @@ public class Reversi extends Etat {
 
             etatAct.setElement(posX, posY, joueur.getColor());
             if (direction == BAS) {
-                if (etatAct.getElement(posX+1, posY) == joueur.getColor()){
+                if (etatAct.getElement(posX+1, posY) == joueur.getColor() || etatAct.getElement(posX+1, posY) == 100){
                     erreur = true;
                 }
                 posX++;
             }else if (direction == HAUT){
-                if (etatAct.getElement(posX-1, posY) == joueur.getColor()){
+                if (etatAct.getElement(posX-1, posY) == joueur.getColor() || etatAct.getElement(posX-1, posY) == 100){
                     erreur = true;
                 }
                 posX--;
             }else if (direction == DROITE){
-                if (etatAct.getElement(posX, posY+1) == joueur.getColor()){
+                if (etatAct.getElement(posX, posY+1) == joueur.getColor() || etatAct.getElement(posX, posY+1) == 100){
                     erreur = true;
                 }
                 posY++;
             }else if (direction == GAUCHE){
-                if (etatAct.getElement(posX, posY-1) == joueur.getColor()){
+                if (etatAct.getElement(posX, posY-1) == joueur.getColor() || etatAct.getElement(posX, posY-1) == 100){
                     erreur = true;
                 }
                 posY--;
             }else if (direction == HAUTDROITE){
-                if (etatAct.getElement(posX-1, posY+1) == joueur.getColor()){
+                if (etatAct.getElement(posX-1, posY+1) == joueur.getColor() || etatAct.getElement(posX-1, posY+1) == 100){
                     erreur = true;
                 }
                 posX--; posY++;
             }else if (direction == BASDROITE){
-                if (etatAct.getElement(posX+1, posY+1) == joueur.getColor()){
+                if (etatAct.getElement(posX+1, posY+1) == joueur.getColor() || etatAct.getElement(posX+1, posY+1) == 100){
                     erreur = true;
                 }
                 posX++; posY++;
             }else if (direction == BASGAUCHE){
-                if (etatAct.getElement(posX+1, posY-1) == joueur.getColor()){
+                if (etatAct.getElement(posX+1, posY-1) == joueur.getColor() || etatAct.getElement(posX+1, posY-1) == 100){
                     erreur = true;
                 }
                 posX++; posY--;
             }else if (direction == HAUTGAUCHE){
-                if (etatAct.getElement(posX-1, posY-1) == joueur.getColor()){
+                if (etatAct.getElement(posX-1, posY-1) == joueur.getColor() || etatAct.getElement(posX-1, posY-1) == 100){
                     erreur = true;
                 }
                 posX--; posY--;
             }
         }
         etatAct.setElement(posX, posY, joueur.getColor());
-        if (joueur.getColor() == BLANC && erreur == false){
+        if (joueur.getColor() == BLANC && !erreur){
             successeurBlanc.add(etatAct);
-        }else if (joueur.getColor() == NOIR && erreur == false){
+        }else if (joueur.getColor() == NOIR && !erreur){
             successeurNoir.add(etatAct);
         }
     }
@@ -300,21 +293,6 @@ public class Reversi extends Etat {
                 }
             }
         }
-    }
-
-    public boolean equals(Reversi etat){
-        int plateauEtat[][] = etat.getPlateau();
-        if (plateauEtat.length != 8 || plateauEtat[0].length != 8){
-            return false;
-        }
-        for (int i = 0; i < 8; i++){
-            for (int j = 0; j < 8; j++){
-                if (plateau[i][j] != plateauEtat[i][j]){
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     public Joueur getJoueur(){

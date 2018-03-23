@@ -6,7 +6,12 @@ import java.util.Iterator;
 
 public class Algo {
     public int eval0(Reversi etat) {
-        return etat.getCompteurNoir();
+        if (etat.getJoueur().getColor() == 1) {
+            return etat.compterNoir(etat.getPlateau());
+        } else if (etat.getJoueur().getColor() == 2) {
+            return etat.compterBlanc(etat.getPlateau());
+        }
+        return 0;
     }
 
     public int min(Reversi etat, int profondeur, int alpha, int beta) {
@@ -23,6 +28,12 @@ public class Algo {
             val = max(r, profondeur - 1, alpha, beta);
             if (val < min) {
                 min = val;
+               /* if (val < beta){
+                    beta = val;
+                    if (alpha > beta){
+                        return val;
+                    }
+                }*/
             }
         }
         return min;
@@ -30,7 +41,7 @@ public class Algo {
 
     public int max(Reversi etat, int profondeur, int alpha, int beta) {
         if (profondeur == 0) {
-           return eval0(etat);
+            return eval0(etat);
         }
         int max = -100;
         int min;
@@ -43,6 +54,12 @@ public class Algo {
             val = min(r, profondeur - 1, alpha, beta);
             if (val > max) {
                 max = val;
+              /*  if (val > alpha){
+                    alpha = val;
+                    if (alpha > beta){
+                        return val;
+                    }
+                }*/
             }
         }
         return max;

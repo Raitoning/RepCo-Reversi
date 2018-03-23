@@ -15,8 +15,4 @@ public abstract class Etat {
         this.plateau = plateau;
     }
 
-    public Etat(Reversi r){
-        this.joueur = r.joueur;
-        this.plateau = r.plateau;
-    }
 }
