@@ -19,16 +19,8 @@ public class Algo {
     }
 
     public int eval0bis(Reversi etat) {
-        int pionBlanc;
-        int pionNoir;
-        if (etat.getJoueur().getColor() == 1) {
-            pionNoir = etat.compterNoir(etat.getPlateau()) - etat.compterBlanc(etat.getPlateau());
-            return pionNoir;
-        } else if (etat.getJoueur().getColor() == 2) {
-            pionBlanc = etat.compterBlanc(etat.getPlateau()) - etat.compterNoir(etat.getPlateau());
-            return pionBlanc;
-        }
-        return 0;
+        etat.algo();
+        return etat.sizeSuccesseur();
     }
 
     public int min(Reversi etat, int profondeur, int alpha, int beta, int eval) {

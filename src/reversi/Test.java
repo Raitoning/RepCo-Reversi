@@ -12,7 +12,8 @@ public class Test {
         Reversi r = new Reversi(joueur);
         Partie p1 = new Partie(joueur, joueur2);
 //        p1.jouer();
-        p1.iaVSia();
+        int meilleur = p1.iaVSia(0, 1);
+        System.out.println(meilleur);
     }
 
     public static void main(String[] args){

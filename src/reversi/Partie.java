@@ -18,7 +18,7 @@ public class Partie {
     protected static int NOIR = 1;
 
     public Partie(JoueurBlanc j1, JoueurNoir j2){
-        r = new Reversi(j2);
+        r = new Reversi(j1);
         joueurBlanc = j1;
         joueurNoir = j2;
         gagnant = 0;
@@ -35,12 +35,16 @@ public class Partie {
         int pionNoir;
         r.nettoyer();
         r.algo();
-       /* if (r.successeursize() == 0 && r.getJoueur().getColor() == NOIR) {
+        if (r.successeursize() == 0 && r.getJoueur().getColor() == NOIR) {
             arretNoir = true;
+        }else if (r.successeursize() > 0 && r.getJoueur().getColor() == NOIR){
+            arretNoir = false;
         }
         if (r.successeursize() == 0 && r.getJoueur().getColor() == BLANC) {
             arretBlanc = true;
-        }*/
+        }else if (r.successeursize() > 0 && r.getJoueur().getColor() == BLANC){
+            arretBlanc = false;
+        }
         if (r.compterVide() == 0){
             arretBlanc = true;
             arretNoir = true;
@@ -48,8 +52,6 @@ public class Partie {
         if (arretBlanc && arretNoir) {
             pionNoir = r.compterNoir(r.getPlateau());
             pionBlanc = r.compterBlanc(r.getPlateau());
-            System.out.println(pionNoir);
-            System.out.println(pionBlanc);
             if (pionBlanc > pionNoir) {
                 gagnant = 2;
             } else if (pionNoir > pionBlanc) {
@@ -62,10 +64,10 @@ public class Partie {
         Reversi etat;
         while (i.hasNext()) {
             etat = i.next();
-//            val = algo.min(etat, profondeur, 0, 0, eval);
+           val = algo.min(etat, profondeur, 0, 0, eval);
 
-            val = algo.alphabeta(etat, profondeur, Integer.MIN_VALUE, Integer
-                    .MAX_VALUE, true);
+           // val = algo.alphabeta(etat, profondeur, Integer.MIN_VALUE, Integer
+             //       .MAX_VALUE, true);
 
             if (val > max) {
                 max = val;
@@ -112,29 +114,29 @@ public class Partie {
         }
     }
 
-    public void iaVSia(){
+    public int iaVSia(int eval0a, int eval0b){
         r.aff_tableau();
         while(gagnant == 0) {
             if (r.getJoueur().getColor() == NOIR) {
                 System.out.println("Tour du joueur noir:");
-                r = jeuIA(r, 1, 0);
+                r = jeuIA(r, 3, eval0a);
                 r.aff_tableau();
                 r.setJoueur(joueurBlanc);
                 System.out.println("Le joueur noir a joué en (" +  r.getX() + " ; " +  r.getY() + ")");
             } else if (r.getJoueur().getColor() == BLANC){
                 System.out.println("Tour du joueur blanc:");
-                r = jeuIA(r, 1, 0);
+                r = jeuIA(r, 3, eval0b);
                 r.aff_tableau();
                 r.setJoueur(joueurNoir);
                 System.out.println("Le joueur blanc a joué en (" +  r.getX() + " ; " +  r.getY() + ")");
             }
         }
         if (gagnant == 2){
-            System.out.println(" BLANC GAGNANT");
+            return -1;
         }else if (gagnant == 1){
-           System.out.println("NOIR GAGNANT");
+            return 1;
         }else {
-            System.out.println("EGALITE");
+            return 0;
         }
     }
 }
