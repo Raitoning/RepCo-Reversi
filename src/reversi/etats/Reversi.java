@@ -26,7 +26,6 @@ public class Reversi extends Etat {
     private int hauteur;
     private int largeur;
 
-
     public Reversi(Joueur joueur){
         super(joueur);
         plateau = new int[8][8];
@@ -63,6 +62,48 @@ public class Reversi extends Etat {
             successeurNoir = new ArrayList<Reversi>();
             successeurBlanc = new ArrayList<Reversi>();
         }
+    }
+
+    public boolean isCorner(int x, int y){
+        if (x == 0 && y == 0){
+            return true;
+        }else if (x == 0 && y == largeur){
+            return true;
+        }else if (x == hauteur && y == 0){
+            return true;
+        }else if (x == hauteur && y == largeur){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isMistake(int x, int y){
+        if (x == 1 && y == 0){
+            return true;
+        }else if (x == 0 && y == 1){
+            return true;
+        }else if (x == 1 && y == 1){
+            return true;
+        }else if (x == hauteur - 1 && y == 0){
+            return true;
+        }else if (x == hauteur && y == 1){
+            return true;
+        }else if (x == hauteur - 1 && y == 1){
+            return true;
+        }else if (x == 0 && y == largeur - 1){
+            return true;
+        }else if (x == 1 && y == largeur){
+            return true;
+        }else if (x == 1 && y == largeur - 1){
+            return true;
+        }else if (x == hauteur - 1 && y == largeur){
+            return true;
+        }else if (x == hauteur && y == largeur - 1){
+            return true;
+        }else if (x == hauteur - 1 && y == largeur - 1){
+            return true;
+        }
+        return false;
     }
 
     public int compterNoir(int plateau[][]){

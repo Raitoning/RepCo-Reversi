@@ -12,7 +12,7 @@ public class Test {
         Reversi r = new Reversi(joueur);
         Partie p1 = new Partie(joueur, joueur2);
 //        p1.jouer();
-        int meilleur = p1.iaVSia(0, 1);
+        int meilleur = p1.iaVSia(1, 0);
         System.out.println(meilleur);
     }
 

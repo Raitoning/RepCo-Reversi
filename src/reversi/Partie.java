@@ -18,7 +18,7 @@ public class Partie {
     protected static int NOIR = 1;
 
     public Partie(JoueurBlanc j1, JoueurNoir j2){
-        r = new Reversi(j1);
+        r = new Reversi(j2);
         joueurBlanc = j1;
         joueurNoir = j2;
         gagnant = 0;
@@ -31,10 +31,25 @@ public class Partie {
         Algo algo = new Algo();
         Reversi meilleurcoup = r;
         int val;
-        int pionBlanc;
-        int pionNoir;
         r.nettoyer();
         r.algo();
+        gagnant();
+        Iterator<Reversi> i = r.successeur();
+        Reversi etat;
+        while (i.hasNext()) {
+            etat = i.next();
+           val = algo.min(etat, profondeur, Integer.MIN_VALUE, Integer.MAX_VALUE, eval);
+            if (val > max) {
+                max = val;
+                meilleurcoup = etat;
+            }
+        }
+        return meilleurcoup;
+    }
+
+    public void gagnant(){
+        int pionBlanc;
+        int pionNoir;
         if (r.successeursize() == 0 && r.getJoueur().getColor() == NOIR) {
             arretNoir = true;
         }else if (r.successeursize() > 0 && r.getJoueur().getColor() == NOIR){
@@ -52,6 +67,7 @@ public class Partie {
         if (arretBlanc && arretNoir) {
             pionNoir = r.compterNoir(r.getPlateau());
             pionBlanc = r.compterBlanc(r.getPlateau());
+            System.out.println(pionBlanc + " " + pionNoir);
             if (pionBlanc > pionNoir) {
                 gagnant = 2;
             } else if (pionNoir > pionBlanc) {
@@ -60,21 +76,6 @@ public class Partie {
                 gagnant = 3;
             }
         }
-        Iterator<Reversi> i = r.successeur();
-        Reversi etat;
-        while (i.hasNext()) {
-            etat = i.next();
-           val = algo.min(etat, profondeur, 0, 0, eval);
-
-           // val = algo.alphabeta(etat, profondeur, Integer.MIN_VALUE, Integer
-             //       .MAX_VALUE, true);
-
-            if (val > max) {
-                max = val;
-                meilleurcoup = etat;
-            }
-        }
-        return meilleurcoup;
     }
 
     public void jouer(){
@@ -100,7 +101,6 @@ public class Partie {
                 int y = saisie.nextInt();
                 r.algo();
                 Iterator i = r.successeur();
-              System.out.println(r.successeursize());
                 while (i.hasNext()) {
                     Reversi e = (Reversi) i.next();
                     if (e.getX() == x && e.getY() == y) {
