@@ -5,7 +5,7 @@ import reversi.etats.Reversi;
 import java.util.Iterator;
 
 public class Algo {
-    public int eval0(Reversi etat) {
+    public int eval0a(Reversi etat) {
         int pionBlanc;
         int pionNoir;
         if (etat.getJoueur().getColor() == 1) {
@@ -18,36 +18,30 @@ public class Algo {
         return 0;
     }
 
-    public int eval0bis(Reversi etat) {
-        if (etat.isCorner(etat.getX(), etat.getY())) {
-            return -100;
-        } else if (etat.isMistake(etat.getX(), etat.getY())) {
-            return 100;
-        }
-        int pionBlanc;
-        int pionNoir;
-        if (etat.getJoueur().getColor() == 1) {
-            pionNoir = etat.compterNoir(etat.getPlateau());
-            return pionNoir;
-        } else if (etat.getJoueur().getColor() == 2) {
-            pionBlanc = etat.compterBlanc(etat.getPlateau());
-            return pionBlanc;
-        }
-        return 0;
+    public int eval0b(Reversi etat) {
+        etat.init_poid();
+        return etat.getPoid(etat.getX(), etat.getY());
+    }
+
+    public int eval0c(Reversi etat){
+        etat.algo();
+        return etat.successeursize();
     }
 
     public int min(Reversi etat, int profondeur, int alpha, int beta, int eval) {
-        if (profondeur == 0) {
+        etat.algo();
+        if (profondeur == 0 || etat.successeursize() == 0) {
             if (eval == 1) {
-                return eval0bis(etat);
+                return eval0b(etat);
             } else if (eval == 0) {
-                return eval0(etat);
+                return eval0a(etat);
+            } else if (eval == 2){
+                return eval0c(etat);
             }
         }
-        int min = 10000;
+        int min = 100;
         int max;
         int val;
-        etat.algo();
         Iterator<Reversi> i = etat.successeur();
         while (i.hasNext()) {
             Reversi r = i.next();
@@ -64,17 +58,19 @@ public class Algo {
     }
 
     public int max(Reversi etat, int profondeur, int alpha, int beta, int eval) {
-        if (profondeur == 0) {
+        etat.algo();
+        if (profondeur == 0 || etat.successeursize() == 0) {
             if (eval == 1) {
-                return eval0bis(etat);
+                return eval0b(etat);
             } else if (eval == 0) {
-                return eval0(etat);
+                return eval0a(etat);
+            } else if (eval == 2){
+                return eval0c(etat);
             }
         }
         int max = -100;
         int min;
         int val;
-        etat.algo();
         Iterator<Reversi> i = etat.successeur();
         Reversi r;
         while (i.hasNext()) {

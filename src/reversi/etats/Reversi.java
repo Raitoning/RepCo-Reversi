@@ -1,5 +1,6 @@
 package reversi.etats;
 
+import reversi.Partie;
 import reversi.joueurs.Joueur;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,33 +11,23 @@ public class Reversi extends Etat {
     protected int compteurBlanc;
     protected int compteurNoir;
     protected int plateauEtat[][];
+    protected int poid[][];
     private int x;
     private int y;
     private boolean erreur;
-    protected static int BLANC = 2;
-    protected static int NOIR = 1;
-    protected static int HAUT = 3;
-    protected static int BAS = 4;
-    protected static int GAUCHE = 5;
-    protected static int DROITE = 6;
-    protected static int HAUTGAUCHE = 7;
-    protected static int BASGAUCHE = 8;
-    protected static int BASDROITE= 9;
-    protected static int HAUTDROITE = 10;
-    private int hauteur;
-    private int largeur;
-
-    public Reversi(Joueur joueur){
-        super(joueur);
-        plateau = new int[8][8];
-        hauteur = 8;
-        largeur = 8;
+    public Reversi(Joueur joueur, int hauteur, int largeur){
+        super(joueur, hauteur, largeur);
+        poid = new int[hauteur][largeur];
+        plateau = new int[hauteur][largeur];
+        this.hauteur = hauteur;
+        this.largeur = largeur;
+        init_poid();
         successeurNoir = new ArrayList<Reversi>();
         successeurBlanc = new ArrayList<Reversi>();
-        plateau[3][3] = BLANC;
-        plateau[4][4] = BLANC;
-        plateau[4][3] = NOIR;
-        plateau[3][4] = NOIR;
+        plateau[hauteur / 2 - 1][largeur / 2 - 1] = BLANC;
+        plateau[hauteur / 2][largeur / 2] = BLANC;
+        plateau[hauteur / 2][largeur / 2 - 1] = NOIR;
+        plateau[hauteur / 2 - 1][largeur / 2] = NOIR;
         nettoyer();
     }
 
@@ -52,10 +43,12 @@ public class Reversi extends Etat {
         return compteur;
     }
 
-    public Reversi(Joueur joueur, int plateau[][], boolean nouvelEtat){
+    public Reversi(Joueur joueur, int plateau[][], boolean nouvelEtat, int hauteur, int largeur){
         super(joueur, plateau);
-        largeur = 8;
-        hauteur = 8;
+        this.hauteur = hauteur;
+        this.largeur = largeur;
+        poid = new int[hauteur][largeur];
+        init_poid();
         compteurNoir = compterNoir(plateau);
         compteurBlanc = compterBlanc(plateau);
         if (nouvelEtat){
@@ -64,17 +57,39 @@ public class Reversi extends Etat {
         }
     }
 
+    public void init_poid(){
+        for (int i = 0; i < poid.length; i++){
+            for (int j = 0; j < poid[0].length; j++){
+                if (isCorner(i, j)){
+                    poid[i][j] = 99;
+                }else if (isMistake(i, j)){
+                    poid[i][j] = -99;
+                }else{
+                    if (joueur.getColor() == BLANC){
+                        poid[i][j] = compterBlanc(plateau);
+                    }else{
+                        poid[i][j] = compterNoir(plateau);
+                    }
+                }
+            }
+        }
+    }
+
     public boolean isCorner(int x, int y){
         if (x == 0 && y == 0){
             return true;
-        }else if (x == 0 && y == largeur){
+        }else if (x == 0 && y == largeur - 1){
             return true;
-        }else if (x == hauteur && y == 0){
+        }else if (x == hauteur - 1 && y == 0){
             return true;
-        }else if (x == hauteur && y == largeur){
+        }else if (x == hauteur - 1 && y == largeur - 1){
             return true;
         }
         return false;
+    }
+
+    public int getPoid(int x, int y){
+        return poid[x][y];
     }
 
     public boolean isMistake(int x, int y){
@@ -84,23 +99,23 @@ public class Reversi extends Etat {
             return true;
         }else if (x == 1 && y == 1){
             return true;
-        }else if (x == hauteur - 1 && y == 0){
-            return true;
-        }else if (x == hauteur && y == 1){
+        }else if (x == hauteur - 2 && y == 0){
             return true;
         }else if (x == hauteur - 1 && y == 1){
             return true;
-        }else if (x == 0 && y == largeur - 1){
+        }else if (x == hauteur - 2 && y == 1){
             return true;
-        }else if (x == 1 && y == largeur){
+        }else if (x == 0 && y == largeur - 2){
             return true;
         }else if (x == 1 && y == largeur - 1){
             return true;
-        }else if (x == hauteur - 1 && y == largeur){
+        }else if (x == 1 && y == largeur - 2){
             return true;
-        }else if (x == hauteur && y == largeur - 1){
+        }else if (x == hauteur - 2 && y == largeur - 1){
             return true;
-        }else if (x == hauteur - 1 && y == largeur - 1){
+        }else if (x == hauteur - 1 && y == largeur - 2){
+            return true;
+        }else if (x == hauteur - 2 && y == largeur - 2){
             return true;
         }
         return false;
@@ -215,9 +230,9 @@ public class Reversi extends Etat {
     }
 
     public int[][] copy_tab(){
-        int tab[][] = new int[8][8];
-        for (int i = 0; i < 8; i++){
-            for (int j = 0; j < 8; j++){
+        int tab[][] = new int[hauteur][largeur];
+        for (int i = 0; i < hauteur; i++){
+            for (int j = 0; j < largeur; j++){
                 tab[i][j] = plateau[i][j];
             }
         }
@@ -226,7 +241,7 @@ public class Reversi extends Etat {
 
     public void mouvement(int direction, int adverse, int posX, int posY){
         plateauEtat = copy_tab();
-        Reversi etatAct = new Reversi(joueur, plateauEtat, false);
+        Reversi etatAct = new Reversi(joueur, plateauEtat, false, hauteur, largeur);
         while (etatAct.getElement(posX, posY) == adverse){
 
             etatAct.setElement(posX, posY, joueur.getColor());
@@ -341,20 +356,20 @@ public class Reversi extends Etat {
     }
 
     public void aff_tableau(){
-        for (int i = 0; i < 8; i++){
+        for (int i = 0; i < hauteur; i++){
             System.out.print(i + " | ");
-            for (int j = 0; j < 8; j++){
+            for (int j = 0; j < largeur; j++){
                 System.out.print(plateau[i][j] + " | ");
             }
             System.out.println("");
         }
-        for (int j = 0; j < 8; j++) {
+        for (int j = 0; j < largeur; j++) {
             if (j == 0) {
                 System.out.print("    " + j);
             } else {
                 System.out.print("   " + j);
             }
-            if (j == 7) {
+            if (j == largeur - 1) {
                 System.out.println("");
             }
         }
