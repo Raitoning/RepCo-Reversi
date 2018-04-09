@@ -19,7 +19,15 @@ public class Algo {
     }
 
     public int eval0b(Reversi etat) {
-        etat.init_poid();
+        if (etat.getJoueur().getColor() == 1){
+            if (etat.compterNoir(etat.getPlateau()) < etat.compterBlanc(etat.getPlateau())){
+                etat.init_poid();
+            }
+        }else{
+            if (etat.compterNoir(etat.getPlateau()) > etat.compterBlanc(etat.getPlateau())){
+                etat.init_poid();
+            }
+        }
         return etat.getPoid(etat.getX(), etat.getY());
     }
 

@@ -4,6 +4,8 @@ import reversi.algo.Algo;
 import reversi.etats.Reversi;
 import reversi.joueurs.JoueurBlanc;
 import reversi.joueurs.JoueurNoir;
+
+import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -95,25 +97,35 @@ public class Partie {
         System.out.println("Début de la partie, veuillez rentrer les coordonnés selon l'axe commençant en haut à gauche");
         r.aff_tableau();
         while(continuer) {
-            if (r.getJoueur().getAdversaire() == BLANC) {
+            if (r.getJoueur().getColor() == BLANC) {
                 System.out.println("Tour de l'adversaire:");
                 r = jeuIA(r, 3, 1);
                 r.aff_tableau();
                 System.out.println("L'adversaire a joué en (" +  r.getX() + " ; " +  r.getY() + ")");
-                r.setJoueur(joueurBlanc);
+                r.setJoueur(joueurNoir);
             } else {
+                int x;
+                int y;
                 System.out.println("Votre tour :");
                 System.out.println("x ? ");
-                int x = saisie.nextInt();
+                try{
+                    x = saisie.nextInt();
+                } catch(InputMismatchException nfe){
+                    throw new InputMismatchException("Veuillez rentrer une valeur entière");
+                }
                 System.out.println("y ? ");
-                int y = saisie.nextInt();
+                try{
+                    y = saisie.nextInt();
+                } catch(InputMismatchException nfe){
+                    throw new InputMismatchException("Veuillez rentrer une valeur entière");
+                }
                 r.algo();
                 Iterator i = r.successeur();
                 while (i.hasNext()) {
                     Reversi e = (Reversi) i.next();
                     if (e.getX() == x && e.getY() == y) {
                         r = e;
-                        r.setJoueur(joueurNoir);
+                        r.setJoueur(joueurBlanc);
                     }
                 }
                 System.out.println("votre coup");
@@ -129,9 +141,19 @@ public class Partie {
             r.aff_tableau();
             System.out.println("Tour du joueur : " + r.getJoueur().getColor());
             System.out.println("x ? ");
-            int x = saisie.nextInt();
+            int x;
+            int y;
+            try{
+                x = saisie.nextInt();
+            } catch(InputMismatchException nfe){
+                throw new InputMismatchException("Veuillez rentrer une valeur entière");
+            }
             System.out.println("y ? ");
-            int y = saisie.nextInt();
+            try{
+                 y = saisie.nextInt();
+            } catch(InputMismatchException nfe){
+                throw new InputMismatchException("Veuillez rentrer une valeur entière");
+            }
             r.algo();
             Iterator i = r.successeur();
             while (i.hasNext()) {

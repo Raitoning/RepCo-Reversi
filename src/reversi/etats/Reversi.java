@@ -4,6 +4,7 @@ import reversi.Partie;
 import reversi.joueurs.Joueur;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class Reversi extends Etat {
     protected ArrayList<Reversi> successeurBlanc;
@@ -58,6 +59,7 @@ public class Reversi extends Etat {
     }
 
     public void init_poid(){
+        Random r = new Random();
         for (int i = 0; i < poid.length; i++){
             for (int j = 0; j < poid[0].length; j++){
                 if (isCorner(i, j)){
@@ -65,15 +67,12 @@ public class Reversi extends Etat {
                 }else if (isMistake(i, j)){
                     poid[i][j] = -99;
                 }else{
-                    if (joueur.getColor() == BLANC){
-                        poid[i][j] = compterBlanc(plateau);
-                    }else{
-                        poid[i][j] = compterNoir(plateau);
-                    }
+                   poid[i][j] = 0 + r.nextInt(80 - 0);
                 }
             }
         }
     }
+
 
     public boolean isCorner(int x, int y){
         if (x == 0 && y == 0){
